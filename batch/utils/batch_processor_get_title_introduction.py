@@ -13,7 +13,7 @@ def clean_srt_date(srt_date):
     pass
 
 #### 为了提高主页的CTR，需要手动优化标题前缀
-prefix_base_dir = '麻省理工分布式系统-'
+prefix_base_dir = '[加州大学伯克利分校-电子工程与计算机科学]-'
 ###
      
 def read_all_trans_srt():
@@ -25,7 +25,7 @@ def read_all_trans_srt():
     print(os.path.dirname(__file__))
     base_path = Path(os.path.dirname(__file__)).parent  / 'output' 
     # 获取所有Lecture文件夹并按数字排序
-    lecture_folders = [f for f in base_path.iterdir() if f.is_dir() and f.name.startswith("Lecture")]
+    lecture_folders = [f for f in base_path.iterdir() if f.is_dir() ]
     lecture_folders.sort(key=lambda x: int(re.search(r'Lecture (\d+)', x.name).group(1)))
     
     # 按顺序读取每个trans.srt文件

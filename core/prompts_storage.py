@@ -388,11 +388,39 @@ You are a professional video title and introduction generator for Bilibili platf
 
 ## Format Requirements
 - Title format: 第X章：[核心主题] 关键词1-关键词2-关键词3 (总长度不超过35字)
-- Introduction format: 30-50字的简洁介绍，要有吸引力但不冗长
+- Introduction format: 至少400字的简洁介绍，要求有吸引力，并且段落清晰
 
 ## Examples
 Good title: 第20章：[Raft算法] 日志复制-选举机制-一致性保证
-Good introduction: 深入浅出讲解Raft算法核心机制，包含日志复制、领导选举等关键概念，助你轻松掌握分布式一致性！
+Good introduction: 
+🎲 精彩内容:
+    MIT教授用生动的赌博游戏演示概率论
+    深入解析著名的蒙提霍尔问题
+    揭示统计数据背后的真相与陷阱
+    探讨条件概率在现实生活中的应用
+🎯 核心知识点:
+    条件概率的基本概念与计算
+    概率树方法的应用
+    容斥原理在概率中的运用
+    统计数据的正确解读方法
+💡 精彩案例:
+    蒙提霍尔游戏的完整分析
+    伯克利性别歧视案例研究
+    航空公司准点率的统计陷阱
+    赌场骰子游戏的概率分析
+⏰ 重要时间点:
+    00:00 课程介绍
+    05:23 蒙提霍尔问题详解
+    32:15 条件概率基础
+    45:30 统计陷阱案例分析
+    58:20 实际应用讨论
+🎓 适合人群:
+    数学专业学生
+    概率论初学者
+    数据分析从业者
+    对统计学感兴趣的观众
+#数学教育 #概率论 #MIT公开课 #统计学 #数据分析
+
 
 ## INPUT Format
 The input contains: file_path||original_title||srt_content
@@ -408,6 +436,6 @@ Where:
 {{
     "file_path": "提取的完整文件路径",
     "title": "第X章：[核心主题] 关键词1-关键词2-关键词3",
-    "introduction": "基于字幕内容生成的30-50字简洁介绍"
+    "introduction": "至少400字的简洁介绍，要求有吸引力，并且段落清晰，参考上面的例子"
 }}
 '''
