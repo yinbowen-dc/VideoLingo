@@ -18,6 +18,27 @@ Split the given subtitle text into {num_parts} parts, each less than {word_limit
 3. Split at natural points like punctuation marks or conjunctions
 4. If provided text is repeated words, simply split at the middle of the repeated words.
 
+## Example
+Input: 'This is a long sentence that needs splitting for subtitles'
+Expected Output JSON:
+{{
+    "analysis": "Long sentence about subtitle splitting, can be split after 'sentence'",
+    "split": "This is a long sentence[br]that needs splitting for subtitles"
+}}
+
+Input: 'Machine learning algorithms are becoming increasingly sophisticated and powerful in modern applications'
+Expected Output JSON:
+{{
+    "analysis": "Technical sentence about ML, natural split after 'sophisticated'",
+    "split": "Machine learning algorithms are becoming increasingly sophisticated[br]and powerful in modern applications"
+}}
+
+## Output Requirements
+- MUST use [br] tags to mark split positions
+- MUST return valid JSON format
+- The "split" field MUST contain the complete sentence with [br] inserted at split points
+- Do NOT split the sentence into separate parts, keep it as one string with [br] markers
+
 ## Output in only JSON format
 {{
     "analysis": "Brief analysis of the text structure",
@@ -344,3 +365,77 @@ Clean the given text by:
     "text": "cleaned text here"
 }}
 '''.strip()
+
+
+## ================================================================
+## @ batch_processor_get_title_introduction.py
+def get_title_introduction_prompt(text):
+    return f'''
+## Role
+You are a professional video title and introduction generator for Bilibili platform.
+
+## Task
+1. Extract the file path from the input (before first "||")
+2. Extract the original title (between first and second "||") and get the lecture number
+3. Analyze the SRT subtitle content (after second "||") to understand the video topic
+4. Generate appropriate title and introduction based on the subtitle content
+
+## Requirements
+1. Title must be concise and attractive for Chinese audience
+2. Introduction should be engaging but not too verbose
+3. Format should follow Bilibili style
+4. Title must include the chapter number as prefix
+
+## Format Requirements
+- Title format: 第X章：[核心主题] 关键词1-关键词2-关键词3 (总长度不超过35字)
+- Introduction format: 至少400字的简洁介绍，要求有吸引力，并且段落清晰
+
+## Examples
+Good title: 第20章：[Raft算法] 日志复制-选举机制-一致性保证
+Good introduction: 
+🎲 精彩内容:
+    MIT教授用生动的赌博游戏演示概率论
+    深入解析著名的蒙提霍尔问题
+    揭示统计数据背后的真相与陷阱
+    探讨条件概率在现实生活中的应用
+🎯 核心知识点:
+    条件概率的基本概念与计算
+    概率树方法的应用
+    容斥原理在概率中的运用
+    统计数据的正确解读方法
+💡 精彩案例:
+    蒙提霍尔游戏的完整分析
+    伯克利性别歧视案例研究
+    航空公司准点率的统计陷阱
+    赌场骰子游戏的概率分析
+⏰ 重要时间点:
+    00:00 课程介绍
+    05:23 蒙提霍尔问题详解
+    32:15 条件概率基础
+    45:30 统计陷阱案例分析
+    58:20 实际应用讨论
+🎓 适合人群:
+    数学专业学生
+    概率论初学者
+    数据分析从业者
+    对统计学感兴趣的观众
+#数学教育 #概率论 #MIT公开课 #统计学 #数据分析
+
+
+## INPUT Format
+The input contains: file_path||original_title||srt_content
+Where:
+- file_path: The complete path to the subtitle file
+- original_title: The original lecture title (e.g., "Lecture 20： Blockstack")
+- srt_content: The subtitle content with timestamps and text
+
+## INPUT
+{text}
+
+## Output in only JSON format
+{{
+    "file_path": "提取的完整文件路径",
+    "title": "第X章：[核心主题] 关键词1-关键词2-关键词3",
+    "introduction": "至少400字的简洁介绍，要求有吸引力，并且段落清晰，参考上面的例子"
+}}
+'''
