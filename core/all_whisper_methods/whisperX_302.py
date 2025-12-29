@@ -30,12 +30,38 @@ def transcribe_audio_302(raw_audio_path: str, vocal_audio_path: str, start: floa
         start = 0
         end = audio_duration
         
-    start_sample = int(start * sr)
-    end_sample = int(end * sr)
-    y_slice = y[start_sample:end_sample]
     
-    # 创建临时音频文件
-    audio_file = "output/audio/raw.mp3"
+    # ✅ 新代码 - 使用FFmpeg切分：
+    if start is not None and end is not None and (start > 0 or end < audio_duration):
+        # 使用FFmpeg直接切分，保持原始格式
+        with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as temp_file:
+            ffmpeg_command = [
+                'ffmpeg',
+                '-i', vocal_audio_path,
+                '-ss', str(start),
+                '-t', str(end - start),
+                '-c', 'copy',  # 复制编码，不重新编码
+                '-y',  # 覆盖输出文件
+                temp_file.name
+            ]
+            
+            rprint(f"[cyan]🔪 使用FFmpeg切分音频: {start}s - {end}s[/cyan]")
+            ffmpeg_result = subprocess.run(ffmpeg_command, capture_output=True, text=True)
+            if ffmpeg_result.returncode != 0:
+                rprint(f"[red]❌ FFmpeg切分失败: {ffmpeg_result.stderr}[/red]")
+                return None
+            
+            audio_file = temp_file.name
+            
+            # 检查切分后的文件
+            file_size = os.path.getsize(audio_file)
+            rprint(f"[green]✓ 切分完成，文件大小: {file_size / 1024 / 1024:.1f}MB[/green]")
+    else:
+        # 直接使用原始文件
+        audio_file = vocal_audio_path
+        rprint(f"[cyan]📁 使用完整音频文件[/cyan]")
+    # # 创建临时音频文件
+    # audio_file = "output/audio/raw.mp3"
     try:
         
         # 构建curl命令 - 完全模拟你成功的命令
@@ -111,6 +137,12 @@ def transcribe_audio_302(raw_audio_path: str, vocal_audio_path: str, start: floa
     except Exception as e:
         rprint(f"[red]❌ 执行失败: {e}[/red]")
         return None
+    finally:
+         # ✅ 添加清理临时文件
+        try:
+            os.remove(audio_file)
+        except:
+            pass
     
     # 调整时间戳
     if start is not None and start > 0:
@@ -134,10 +166,10 @@ def transcribe_audio_302(raw_audio_path: str, vocal_audio_path: str, start: floa
 if __name__ == "__main__":  
     # 使用示例:
     result = transcribe_audio_302("output/audio/raw.mp3", "output/audio/raw.mp3")
-    if result:
-        rprint(f"[green]成功！获得 {len(result.get('segments', []))} 个片段[/green]")
-        # 打印第一个片段的内容
-        if result.get('segments'):
-            rprint(f"[cyan]第一个片段: {result['segments'][0].get('text', 'N/A')}[/cyan]")
-    else:
-        rprint("[red]失败！[/red]")
+    # if result:
+    #     rprint(f"[green]成功！获得 {len(result.get('segments', []))} 个片段[/green]")
+    #     # 打印第一个片段的内容
+    #     if result.get('segments'):
+    #         rprint(f"[cyan]第一个片段: {result['segments'][0].get('text', 'N/A')}[/cyan]")
+    # else:
+    #     rprint("[red]失败！[/red]")

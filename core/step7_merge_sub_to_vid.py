@@ -142,10 +142,7 @@ def merge_subtitles_to_video(test_mode=False, test_duration=30):
     start_time = time.time()
     
     # 🔥 改进错误处理，过滤AV1警告
-    process = subprocess.Popen(ffmpeg_cmd, 
-                              stdout=subprocess.PIPE, 
-                              stderr=subprocess.PIPE, 
-                              text=True)
+    process = subprocess.Popen(ffmpeg_cmd)
 
     try:
         stdout, stderr = process.communicate()
