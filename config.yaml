@@ -6,12 +6,12 @@ display_language: "zh-CN"
 
 # API settings
 api:
-  key: 'sk-s7pvNTkGHVFkpGRW7SMWsYFCXO01CpnJr7C8jZD8kIpAck2k'
+  key: 'sk-SZZ4FDEHYZN7vSbw45VkhOnfkkz6NXeNDEwemvc0H2jQF1SC'
   base_url: 'https://api.302.ai'
   model: 'gemini-2.0-flash'
 
 # Language settings, written into the prompt, can be described in natural language
-target_language: 'Chinese'
+target_language: 'zh'
 
 # Whether to use Demucs for vocal separation before transcription
 demucs: true
@@ -23,9 +23,9 @@ whisper:
   language: 'en'
   detected_language: 'en'
   # Whisper running mode ["local", "cloud", "elevenlabs"]. Specifies where to run, cloud uses 302.ai API
-  runtime: 'local'
+  runtime: 'cloud'
   # 302.ai API key
-  whisperX_302_api_key: 'sk-s7pvNTkGHVFkpGRW7SMWsYFCXO01CpnJr7C8jZD8kIpAck2k'
+  whisperX_302_api_key: 'sk-SZZ4FDEHYZN7vSbw45VkhOnfkkz6NXeNDEwemvc0H2jQF1SC'
   # ElevenLabs API key
   elevenlabs_api_key: 'your_elevenlabs_api_key'
 
@@ -67,7 +67,7 @@ tts_method: 'f5tts'
 # SiliconFlow FishTTS
 sf_fish_tts:
   # SiliconFlow API key
-  api_key: 'sk-s7pvNTkGHVFkpGRW7SMWsYFCXO01CpnJr7C8jZD8kIpAck2k'
+  api_key: 'sk-SZZ4FDEHYZN7vSbw45VkhOnfkkz6NXeNDEwemvc0H2jQF1SC'
   # only for mode "preset"
   voice: 'anna'
   # *only for mode "custom", dont set manually
@@ -78,17 +78,17 @@ sf_fish_tts:
 
 # OpenAI TTS-1 API configuration, 302.ai API only
 openai_tts:
-  api_key: 'sk-s7pvNTkGHVFkpGRW7SMWsYFCXO01CpnJr7C8jZD8kIpAck2k'
+  api_key: 'sk-SZZ4FDEHYZN7vSbw45VkhOnfkkz6NXeNDEwemvc0H2jQF1SC'
   voice: 'alloy'
 
 # Azure configuration, 302.ai API only
 azure_tts:
-  api_key: 'sk-s7pvNTkGHVFkpGRW7SMWsYFCXO01CpnJr7C8jZD8kIpAck2k'
+  api_key: 'sk-SZZ4FDEHYZN7vSbw45VkhOnfkkz6NXeNDEwemvc0H2jQF1SC'
   voice: 'zh-CN-YunfengNeural'
 
 # FishTTS configuration, 302.ai API only
 fish_tts:
-  api_key: 'sk-s7pvNTkGHVFkpGRW7SMWsYFCXO01CpnJr7C8jZD8kIpAck2k'
+  api_key: 'sk-SZZ4FDEHYZN7vSbw45VkhOnfkkz6NXeNDEwemvc0H2jQF1SC'
   character: 'AD学姐'
   character_id_dict:
     'AD学姐': '7f92f8afb8ec43bf81429cc1c9199cb1'
@@ -108,7 +108,7 @@ gpt_sovits:
   refer_mode: 3
 
 f5tts:
-  302_api: 'sk-s7pvNTkGHVFkpGRW7SMWsYFCXO01CpnJr7C8jZD8kIpAck2k'
+  302_api: 'sk-SZZ4FDEHYZN7vSbw45VkhOnfkkz6NXeNDEwemvc0H2jQF1SC'
 
 # *Audio speed range
 speed_factor:

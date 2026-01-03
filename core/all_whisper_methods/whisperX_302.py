@@ -15,24 +15,25 @@ OUTPUT_LOG_DIR = "output/log"
 def transcribe_audio_302(raw_audio_path: str, vocal_audio_path: str, start: float = None, end: float = None):
     os.makedirs(OUTPUT_LOG_DIR, exist_ok=True)
     LOG_FILE = f"{OUTPUT_LOG_DIR}/whisperx302.json"
-    if os.path.exists(LOG_FILE):
-        with open(LOG_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+
         
     WHISPER_LANGUAGE = load_key("whisper.language")
     save_language(WHISPER_LANGUAGE)
     
     # 加载音频并处理start和end参数
     y, sr = librosa.load(vocal_audio_path, sr=16000)
-    audio_duration = len(y) / sr
     
-    if not start or not end:
+    if start is None or end is None :
         start = 0
         end = audio_duration
+        # 如果文件是属于 只传一次的话
+        if os.path.exists(LOG_FILE):
+            with open(LOG_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
         
     
     # ✅ 新代码 - 使用FFmpeg切分：
-    if start is not None and end is not None and (start > 0 or end < audio_duration):
+    if start is not None and end is not None and (start >= 0 or end <= audio_duration):
         # 使用FFmpeg直接切分，保持原始格式
         with tempfile.NamedTemporaryFile(suffix='.mp3', delete=False) as temp_file:
             ffmpeg_command = [
@@ -138,12 +139,12 @@ def transcribe_audio_302(raw_audio_path: str, vocal_audio_path: str, start: floa
         rprint(f"[red]❌ 执行失败: {e}[/red]")
         return None
     finally:
-         # ✅ 添加清理临时文件
-        try:
-            os.remove(audio_file)
-        except:
-            pass
-    
+        # ✅ 修复：只删除临时文件
+        if audio_file != vocal_audio_path:
+            try:
+                os.remove(audio_file)
+            except:
+                pass
     # 调整时间戳
     if start is not None and start > 0:
         for segment in response_json.get('segments', []):
@@ -165,7 +166,7 @@ def transcribe_audio_302(raw_audio_path: str, vocal_audio_path: str, start: floa
 
 if __name__ == "__main__":  
     # 使用示例:
-    result = transcribe_audio_302("output/audio/raw.mp3", "output/audio/raw.mp3")
+    result = transcribe_audio_302("output/audio/vocal.mp3", "output/audio/vocal.mp3")
     # if result:
     #     rprint(f"[green]成功！获得 {len(result.get('segments', []))} 个片段[/green]")
     #     # 打印第一个片段的内容
