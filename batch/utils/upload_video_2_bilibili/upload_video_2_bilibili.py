@@ -12,6 +12,8 @@ from core.ask_gpt import ask_gpt
 from core.config_utils import load_key
 import pexpect
 import sys
+import datetime
+
 
 console = Console()
 
@@ -67,6 +69,17 @@ def method1_upload(video_path, title, tags, introduction, schedule_time, partiti
 def method2_generate_excel(output_root="batch/output", excel_path=EXCEL_DEFAULT_PATH):
     base = Path(output_root)
     rows = []
+
+    # 获取当前时间
+    now = datetime.datetime.now()
+    # 获取明天的日期，时间设为18:00:00
+    tomorrow_6pm = now.replace(hour=18, minute=0, second=0, microsecond=0) + datetime.timedelta(days=1)
+    # 转换为时间戳
+    base_timestamp = int(tomorrow_6pm.timestamp())
+    # Debug
+    # print(base_timestamp)
+    # print(tomorrow_6pm)
+    # print(base)
     if base.exists():
         for child in base.iterdir():
             if child.is_dir():
@@ -104,15 +117,15 @@ def method2_generate_excel(output_root="batch/output", excel_path=EXCEL_DEFAULT_
                     "标签": tags,
                     "描述简介": introduction,
                     "版权声明": 1,
-                    "定时发布时间戳": "",
+                    "定时发布时间戳": base_timestamp,
                     "分区": TID,
                     "加入合集": ""
                 })
+                base_timestamp += 86400
     df = pd.DataFrame(rows)
     os.makedirs(os.path.dirname(excel_path), exist_ok=True)
     df.to_excel(excel_path, index=False, engine="openpyxl")
     console.print(Panel(f"Excel 生成完成: {excel_path}", title="[bold green]方法2[/bold green]"))
-
     return excel_path
 
 def method3_upload_from_excel(excel_path=EXCEL_DEFAULT_PATH, cookies=None):
