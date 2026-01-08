@@ -14,8 +14,10 @@ OUTPUT_LOG_DIR = "output/log"
 
 def transcribe_audio_302(raw_audio_path: str, vocal_audio_path: str, start: float = None, end: float = None):
     os.makedirs(OUTPUT_LOG_DIR, exist_ok=True)
-    LOG_FILE = f"{OUTPUT_LOG_DIR}/whisperx302.json"
-
+    LOG_FILE = f"{OUTPUT_LOG_DIR}/whisperx302_{start}_{end}.json"
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
         
     WHISPER_LANGUAGE = load_key("whisper.language")
     save_language(WHISPER_LANGUAGE)
@@ -23,7 +25,7 @@ def transcribe_audio_302(raw_audio_path: str, vocal_audio_path: str, start: floa
     # 加载音频并处理start和end参数
     y, sr = librosa.load(vocal_audio_path, sr=16000)
     
-    if start is None or end is None :
+    if start is None or end is None:
         start = 0
         end = audio_duration
         # 如果文件是属于 只传一次的话

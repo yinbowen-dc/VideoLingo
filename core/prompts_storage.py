@@ -389,6 +389,7 @@ You are a professional video title and introduction generator for Bilibili platf
 ## Format Requirements
 - Title format: 第X章：[核心主题] 关键词1-关键词2-关键词3 (总长度不超过35字)
 - Introduction format: 至少400字的简洁介绍，要求有吸引力，并且段落清晰
+- Tags: 输出当前的tags
 
 ## Examples
 Good title: 第20章：[Raft算法] 日志复制-选举机制-一致性保证
@@ -420,7 +421,7 @@ Good introduction:
     数据分析从业者
     对统计学感兴趣的观众
 #数学教育 #概率论 #MIT公开课 #统计学 #数据分析
-
+Good tags: 数学教育,概率论,MIT公开课,统计学,数据分析
 
 ## INPUT Format
 The input contains: file_path||original_title||srt_content
@@ -436,6 +437,7 @@ Where:
 {{
     "file_path": "提取的完整文件路径",
     "title": "第X章：[核心主题] 关键词1-关键词2-关键词3",
-    "introduction": "至少400字的简洁介绍，要求有吸引力，并且段落清晰，参考上面的例子"
+    "introduction": "至少400字的简洁介绍，要求有吸引力，并且段落清晰，参考上面的例子",
+    "tags":"要有三个不同的标签，要求高度概括当前的视频的内容，根据字幕中的内容"
 }}
 '''

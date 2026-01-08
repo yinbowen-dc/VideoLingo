@@ -90,7 +90,7 @@ def get_tasks_setting_info():
      df = pd.read_excel(base_path)
      return df
 
-def json_valid(response_data):
+def f(response_data):
         try:
             json.loads(response_data)
             return response_data
@@ -99,8 +99,7 @@ def json_valid(response_data):
         
 def get_title_introduction_batch():
         responses = []
-        all_trans_srt =read_all_trans_srt()
-
+        trans_srtall_trans_srt =read_all_trans_srt()
         trans_srt_len = len(all_trans_srt)
         for i in range(trans_srt_len):
             trans_srt = all_trans_srt[i]
