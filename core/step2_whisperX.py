@@ -8,6 +8,8 @@ from core.all_whisper_methods.demucs_vl import demucs_main, RAW_AUDIO_FILE, VOCA
 from core.all_whisper_methods.audio_preprocess import process_transcription, convert_video_to_audio, split_audio, save_results, CLEANED_CHUNKS_EXCEL_PATH, normalize_audio_volume
 from core.step1_ytdlp import find_video_files
 
+import json 
+
 def transcribe():
     if os.path.exists(CLEANED_CHUNKS_EXCEL_PATH):
         rprint("[yellow]⚠️ Transcription results already exist, skipping transcription step.[/yellow]")
@@ -24,8 +26,12 @@ def transcribe():
     else:
         vocal_audio = RAW_AUDIO_FILE
 
-    # step2 Extract audio
+    # # step2 Extract audio
     segments = split_audio(RAW_AUDIO_FILE)
+    
+    # 输出数组到JSON文件
+    # with open('log/segments.json', 'w', encoding='utf-8') as f:
+    #     json.dump(segments, f, indent=4, ensure_ascii=False, default=str)
     
     # step3 Transcribe audio
     all_results = []
@@ -41,16 +47,28 @@ def transcribe():
         rprint("[cyan]🎤 Transcribing audio with ElevenLabs API...[/cyan]")
 
     for start, end in segments:
-        result = ts(RAW_AUDIO_FILE, vocal_audio, start, end)
+        result = ts(RAW_AUDIO_FILE, vocal_audio,start, end)
         all_results.append(result)
+
+    # # 输出数组到JSON文件
+    # with open('log/all_results.json', 'w', encoding='utf-8') as f:
+    #     json.dump(all_results, f, indent=4, ensure_ascii=False, default=str)
     
     # step4 Combine results
     combined_result = {'segments': []}
     for result in all_results:
         combined_result['segments'].extend(result['segments'])
     
+    # with open('log/combined_result.json', 'w', encoding='utf-8') as f:
+    #     json.dump(combined_result, f, indent=4, ensure_ascii=False, default=str)
+
     # step5 Process df
     df = process_transcription(combined_result)
+
+    # print(len(df['start'].unique()))
+    # print(len(df['start']))
+    # print(len(df['start'].unique()) == len(df['start']) )
+    # df.to_excel(CLEANED_CHUNKS_EXCEL_PATH, index=False)
     save_results(df)
         
 if __name__ == "__main__":

@@ -10,6 +10,9 @@ from typing import Optional
 from demucs.api import Separator
 from demucs.apply import BagOfModels
 import gc
+import logging
+
+log = logging.getLogger(__name__)
 
 AUDIO_DIR = "output/audio"
 RAW_AUDIO_FILE = os.path.join(AUDIO_DIR, "raw.mp3")
@@ -43,6 +46,7 @@ def demucs_main():
              "clip": "rescale", "as_float": False, "bits_per_sample": 16}
     
     console.print("🎤 Saving vocals track...")
+    log.info(f"vocals shape: {outputs['vocals'].shape}")
     save_audio(outputs['vocals'].cpu(), VOCAL_AUDIO_FILE, **kwargs)
     
     console.print("🎹 Saving background music...")
