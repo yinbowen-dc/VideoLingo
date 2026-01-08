@@ -2,6 +2,7 @@ import os
 import time
 import subprocess
 from pathlib import Path
+from typing import Collection
 import pandas as pd
 from rich.console import Console
 from rich.panel import Panel
@@ -20,6 +21,7 @@ console = Console()
 ##############参数控制##################
 
 TID=36 # 野生技术协会
+COLLECTION="[Web3]智能合约开发教程"
 ################################
 
 EXCEL_DEFAULT_PATH = os.path.join("batch", "output", "bilibili_upload_tasks.xlsx")
@@ -47,7 +49,7 @@ def method1_upload(video_path, title, tags, introduction, schedule_time, partiti
         args += ["--dtime", "\"" + str(int(schedule_time)) + "\""]
     # 合集
     if collection:
-        args += ["--collection", "\"" + str(int(collection)) + "\"" ] 
+        args += ["--collection", "\"" + str(collection) + "\"" ] 
 
     # 需要先运行这个命令，阻塞当前的进程
     cmd = ["biliup"]
@@ -119,7 +121,7 @@ def method2_generate_excel(output_root="batch/output", excel_path=EXCEL_DEFAULT_
                     "版权声明": 1,
                     "定时发布时间戳": base_timestamp,
                     "分区": TID,
-                    "加入合集": ""
+                    "加入合集": COLLECTION
                 })
                 base_timestamp += 86400
     df = pd.DataFrame(rows)
@@ -164,7 +166,7 @@ def method3_upload_from_excel(excel_path=EXCEL_DEFAULT_PATH, cookies=None):
             ))
             # 
             method1_upload(
-                video_path=video_path, title=title, tags=tags, introduction=introduction, schedule_time=schedule_time, partition=partition, collection=None, cookies_path="cookies.json"
+                video_path=video_path, title=title, tags=tags, introduction=introduction, schedule_time=schedule_time, partition=partition, collection=collection, cookies_path="cookies.json"
             )
            
             df.at[idx, status_col] = "Done"
